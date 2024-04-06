@@ -1,18 +1,16 @@
 <?php require_once('header.php') ?>
 
 <?php 
-if(!isset($_REQUEST['id'])) {
+if(!isset($_REQUEST['s'])) {
     header('location: index.php');
     exit();
 } else {
-    $statement = $pdo->prepare("SELECT * FROM tbl_product WHERE category_id=?");
-    $statement->execute(array($_REQUEST['id']));
+    $statement = $pdo->prepare("SELECT * FROM tbl_product WHERE name LIKE ? ");
+    $searchtext = strip_tags($_REQUEST['s']);
+    $searchtext = '%'.$searchtext.'%';
+    $statement->execute(array($searchtext));
     $total = $statement->rowCount();
     $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-    if( $total == 0 ) {
-        header('location: index.php');
-        exit;
-    }
 }
 ?>
 
@@ -27,23 +25,15 @@ if(!isset($_REQUEST['id'])) {
                                 <a href="/"></a>
                             </li>
                             <li>
+                                Tìm kiếm :
                                 <?php 
-                                    $statement_1 = $pdo->prepare("SELECT * FROM tbl_category WHERE id=?");
-                                    $statement_1->execute(array($_REQUEST['id']));
-                                    $result_1 = $statement_1->fetch(PDO::FETCH_ASSOC);
-                                    echo $result_1['name'];
+                                    echo $_REQUEST['s'];
                                 ?>
                             </li>
                         </ul> <span class="clearfix"></span>
                     </h1> 
-                    <select onchange="window.location.href = this.value" class="form-control d-none d-xl-block my-3">
-                        <option value="/set-qua-pc539973.html?show=">Mới nhất</option>
-                        <option value="/set-qua-pc539973.html?show=priceAsc">Giá tăng dần</option>
-                        <option value="/set-qua-pc539973.html?show=priceDesc">Giá giảm dần</option>
-                    </select>
                 </div>
                 <div class="clearfix"></div>
-                <div class="js-open-filter"><i class="fa fa-filter d-block"></i> Filter</div>
 
                 <div class="product-list">
                     <div class="row">

@@ -24,7 +24,84 @@ foreach($result as $row) {
 }
 ?>
 
+<?php
+if(isset($_POST['form_add_to_cart'])) {
+    if(isset($_SESSION['cart_p_id'])) {
+        $arr_cart_p_id = array();
+        $arr_cart_p_qty = array();
+        $arr_cart_p_name = array();
+        $arr_cart_p_current_price = array();
 
+        $i = 0;
+        foreach($_SESSION['cart_p_id'] as $key => $value) {
+            $i++;
+            $arr_cart_p_id[$i] = $value;
+        }
+
+        $i = 0;
+        foreach($_SESSION['cart_p_qty'] as $key => $value) {
+            $i++;
+            $arr_cart_p_qty[$i] = $value;
+        }
+
+        $i = 0;
+        foreach($_SESSION['cart_p_name'] as $key => $value) {
+            $i++;
+            $arr_cart_p_name[$i] = $value;
+        }
+
+        $i = 0;
+        foreach($_SESSION['cart_p_current_price'] as $key => $value) {
+            $i++;
+            $arr_cart_p_current_price[$i] = $value;
+        }    
+
+        $added = 0;
+        for ($i = 1; $i <= count($arr_cart_p_id); $i++) {
+            if($arr_cart_p_id[$i] == $_REQUEST['id']) {
+                $added = 1;
+                break;
+            }
+        }
+
+        if ($added == 1) {
+            $error_message = "Sản phẩm này đã có trong giỏ hàng, vui lòng điều chỉnh số lượng trong giỏ hàng của bạn.";
+        } else {
+            $i = 0;
+            foreach($_SESSION['cart_p_id'] as $key => $res) {
+                $i++;
+            }
+
+            $new_key = $i+1;
+            $_SESSION['cart_p_id'][$new_key] = $_REQUEST['id'];
+            $_SESSION['cart_p_qty'][$new_key] = $_POST['add_p_qty'];
+            $_SESSION['cart_p_name'][$new_key] = $_POST['add_p_name'];
+            $_SESSION['cart_p_current_price'][$new_key] = $_POST['add_p_current_price'] * $_SESSION['cart_p_qty'][$new_key];
+            
+            $success_message = "Thêm sản phẩm thành công vào giỏ hàng !";
+        }
+    } else {
+        $_SESSION['cart_p_id'][1] = $_REQUEST['id'];
+        $_SESSION['cart_p_qty'][1] = $_POST['add_p_qty'];
+        $_SESSION['cart_p_name'][1] = $_POST['add_p_name'];
+        $_SESSION['cart_p_current_price'][1] = $_POST['add_p_current_price'] * $_SESSION['cart_p_qty'][1];
+
+        $success_message = "Thêm sản phẩm thành công vào giỏ hàng !";
+    }
+}
+?>
+
+<?php
+if($error_message != "") {
+    echo "<script>alert('".$error_message."')</script>";
+}
+if($success_message != "") {
+    echo "<script>alert('".$success_message."')</script>";
+    header('location: product.php?id='.$_REQUEST['id']);
+}
+?>
+
+<form action="" method="post">
 <main class="mains">
     <div class="container">
         <div class="row">
@@ -44,18 +121,20 @@ foreach($result as $row) {
 
                 <div class="blk-price">
                     <div class="product-price">
+                        <input type="hidden" name = "add_p_current_price" value="<?php echo $product_price ?>">
+                        <input type="hidden" name = "add_p_name" value="<?php echo $product_name ?>">
                         <span class="price"> <?php echo $product_price ?> đ</span>
                     </div>
                 </div>
 
-                <div class="blk-att" data-label="Màu sắc, size sản phẩm">
+                <div class="blk-att" style="margin-top: 100px;" data-label="">
                     <div class="r-at-r d-flex align-items-center">
                         <label class="pull-left">Số lượng</label>
                         <div class="pull-left">
                             <div class="blk-qty d-flex justify-content-center align-items-center">
                                 <div class="blk-qty-btn minus d-flex justify-content-center align-items-center">-</div>
                                 <input class="blk-qty-input d-flex justify-content-center align-items-center"
-                                    type="text" id="quantity" max="73" min="1" value="1">
+                                    type="text" name="add_p_qty" id="quantity" max="73" min="1" value="1">
                                 <div class="blk-qty-btn plus d-flex justify-content-center align-items-center">+</div>
                             </div>
                         </div>
@@ -63,8 +142,7 @@ foreach($result as $row) {
                     <div class="clearfix"></div>
 
                     <div class="r-at-r d-sm-flex align-items-center clearfix" data-label="btn">
-                        <div id="addToCart" class="btn-js-add-cart btn btn-pink" data-psid="37908433"
-                            data-selid="37908433" data-ck="0" title="">Thêm vào giỏ hàng</div>
+                        <input type="submit" id="addToCart" class="btn-js-add-cart btn btn-pink" name="form_add_to_cart" value="Thêm vào giỏ hàng">
                     </div>
                     <div id="mss-alret"></div>
                 </div>
@@ -104,3 +182,8 @@ foreach($result as $row) {
         </div>
     </div>
 </main>
+</form>
+
+<?php 
+    require_once('footer.php');
+?>

@@ -1,4 +1,7 @@
 <?php
+
+ini_set('error_reporting', E_ALL);
+
 $dbhost = 'localhost';
 $dbuser = 'root';
 $dbpass = '';
