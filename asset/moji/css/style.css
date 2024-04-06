@@ -1122,7 +1122,7 @@ sub{
 
         .btn-js-add-cart{
             cursor: pointer;
-            width: 49%;
+            width: 100%;
             padding: .6rem 1rem;
             text-transform: uppercase;
             font-family: 'Nunito-Bold';
