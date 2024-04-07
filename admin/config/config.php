@@ -1,15 +1,15 @@
 <?php
 
-ini_set('error_reporting', E_ALL);
+
 
 $dbhost = 'localhost';
 $dbuser = 'root';
 $dbpass = '';
 $dbname = 'moji';
 
-define("BASE_URL", "http://localhost/moji");
+define("BASE_URL", "http://localhost");
 
-define("ADMIN_URL", BASE_URL . "admin" . "/");
+define("ADMIN_URL", BASE_URL . "/admin");
 
 try {
     $pdo = new PDO("mysql:host={$dbhost};dbname={$dbname}", $dbuser, $dbpass);

@@ -89,10 +89,6 @@ if(isset($_SESSION["cart_p_id"])){
                     </div>
                     <div class="head-col-right col-lg-3 col-12">
                         <div class="header-right d-flex align-items-start">
-                            <ul class="header-user d-none d-md-block">
-                                <li><a href="/user/signin">Đăng nhập</a></li>
-                            </ul>
-
                             <div class="count-cart" title="Giỏ hàng">
                                 <div class="count-cart-icon">
                                     <span class="count d-flex align-items-center justify-content-center">
